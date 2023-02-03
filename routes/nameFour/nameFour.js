@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const app = express()
+const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
-
+app.use(cors())
+app.use(express.json())
 
 const uri = `mongodb+srv://endgame:${process.env.DB_PASSWORD}@cluster0.flakcz3.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -34,6 +37,13 @@ const run = async () => {
             // console.log(id)
             const query = {_id: ObjectId(id)}
             const result = await popularPackeges.findOne(query)
+            res.send(result)
+        })
+
+        router.post('/packages', async(req, res) =>{
+            const package = req.body;
+            console.log(package)
+            const result = await popularPackeges.insertOne(package)
             res.send(result)
         })
 
