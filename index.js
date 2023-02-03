@@ -16,7 +16,7 @@ const nameFourRouter = require('./routes/nameFour/nameFour')
 const nameFiveRouter = require('./routes/nameFive/nameFive')
 const nameSixRouter = require('./routes/nameSix/nameSix')
 const admin = require('./routes/admin/admin')
-const doctors = require('./routes/doctors/doctors')
+const doctors = require('./routes/doctors/doctors');
 
 
 // route import end//
@@ -42,7 +42,6 @@ app.use(nameSixRouter)
 
 app.use(admin)
 app.use(doctors)
-
 
 
 
