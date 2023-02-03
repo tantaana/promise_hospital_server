@@ -46,10 +46,6 @@ app.use(doctors)
 
 
 
-
-
-
-
 app.get('/', (req, res) => {
     res.send('bismillahir rohmanir rohim')
 
