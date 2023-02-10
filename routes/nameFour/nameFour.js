@@ -41,6 +41,7 @@ const run = async () => {
         const popularPackeges = client.db('Promise_hospital').collection('popularPackages')
         const userData = client.db('Promise_hospital').collection('userData');
         const paymentsCollection = client.db('Promise_hospital').collection('payments')
+        const appointmentData = client.db('Promise_hospital').collection('appointmentData');
         
         router.get('/categories', async (req, res) => {
             const query = {};
@@ -57,7 +58,7 @@ const run = async () => {
         router.get('/booking/:id', async(req, res) =>{
             const id = req.params.id 
             const query = {_id : ObjectId(id)}
-            const booking = await popularPackeges.findOne(query)
+            const booking = await appointmentData.findOne(query)
             res.send(booking)
         })
 
@@ -97,7 +98,7 @@ const run = async () => {
 
         router.post('/create-payment-intent', async (req, res) =>{
             const booking = req.body 
-            const price = booking.price 
+            const price = booking.fees 
             const amount = price * 100;
 
             const paymentIntent = await stripe.paymentIntents.create({
@@ -124,7 +125,7 @@ const run = async () => {
                     transactionId: payment.transactionId
                 }
             }
-            const updateResult = await popularPackeges.updateOne(filter, updateDoc)
+            const updateResult = await appointmentData.updateOne(filter, updateDoc)
             res.send(result)
         })
     }
