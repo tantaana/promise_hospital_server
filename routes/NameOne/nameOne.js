@@ -21,7 +21,7 @@ const run = async () => {
     try {
         const categoriesCollection = client.db('categories').collection('category')
         const specialitiesCollection = client.db('Promise_hospital').collection('specialities')
-        const docInfo = client.db('Promise_hospital').collection('docInfo');
+        // const docInfo = client.db('Promise_hospital').collection('docInfo');
 
         router.get('/categories', async (req, res) => {
             const query = {};
@@ -54,11 +54,11 @@ const run = async () => {
             console.log(result);
             res.send(result);
         })
-        router.get('/docInfo', async (req, res) => {
-            const query = {};
-            const options = await docInfo.find(query).toArray();
-            res.send(options)
-        })
+        // router.get('/docInfo', async (req, res) => {
+        //     const query = {};
+        //     const options = await docInfo.find(query).toArray();
+        //     res.send(options)
+        // })
 
 //         router.get('/', (req, res) => {
 //             res.redirect(`/${uuidV4()}`)
