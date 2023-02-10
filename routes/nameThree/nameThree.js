@@ -19,8 +19,9 @@ const run = async () => {
         const appointmentData = client.db('Promise_hospital').collection('appointmentData');
 
         const userData = client.db('Promise_hospital').collection('userData');
+        const docInfo = client.db('Promise_hospital').collection('docInfo');
 
-
+        // ------------------------
         router.post('/createAppointment', async (req, res) => {
             const products = req.body;
             const result = await appointmentData.insertOne(products);
@@ -33,6 +34,7 @@ const run = async () => {
             res.send(options)
         })
 
+        //----------------------- 
         router.post('/userData', async (req, res) => {
             const user = req.body;
             const email = user.email;
@@ -50,6 +52,47 @@ const run = async () => {
             const query = {};
             const options = await userData.find(query).toArray();
             res.send(options)
+        })
+
+        // ----------------------------------
+
+        router.get('/docInfo', async (req, res) => {
+            const query = {};
+            const options = await docInfo.find(query).toArray();
+            res.send(options)
+        })
+
+        router.get('/docInfo/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await docInfo.findOne(query);
+            res.send(result)
+        })
+
+        // -----------------------------------
+
+        router.post('/addDoctors', async (req, res) => {
+            const products = req.body;
+            const result = await docInfo.insertOne(products);
+            res.send(result)
+        })
+
+        //------------------------------------
+
+        router.get('/appointmentData', async (req, res) => {
+            const patientEmail = req.query.patientEmail;
+            const query = { patientEmail: patientEmail };
+            const result = await appointmentData.find(query).toArray();
+            res.send(result)
+        })
+
+        //----------------------------------
+
+        router.get('/details/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await appointmentData.findOne(query);
+            res.send(result)
         })
 
     }
