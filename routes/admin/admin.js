@@ -15,12 +15,33 @@ const run = async () => {
 
     try {
         const categoriesCollection = client.db('categories').collection('category')
-        
+        const userData = client.db('Promise_hospital').collection('userData');
+
+
         router.get('/categories', async (req, res) => {
             const query = {};
             const categories = await categoriesCollection.find(query).toArray()
             res.send(categories)
         })
+
+        const verifyAdmin = async (req, res, next) => {
+            const decoded = req.decoded.email 
+            const query = {email : decoded}
+            const user = await userData.findOne(query)
+            if(user?.role !== "admin"){
+                return res.status(403).send({message: "Forbiden access"})
+            }
+            next()
+        }
+
+        router.get('/user/admin/:email', async (req, res) => {
+            const email = req.params.email
+            console.log(email)
+            const query = { email }
+            const user = await userData.findOne(query)
+            res.send({ isAdmin: user?.role === "admin" })
+        })
+
     }
     finally {
 
@@ -35,8 +56,8 @@ run().catch(err => console.log(err))
 
 
 
-router.get('/admin',(req,res)=>{
-res.send('admin')
+router.get('/admin', (req, res) => {
+    res.send('admin')
 })
 
 module.exports = router;
