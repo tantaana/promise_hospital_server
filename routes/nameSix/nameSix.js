@@ -16,6 +16,9 @@ const run = async () => {
     try {
         const categoriesCollection = client.db('categories').collection('category')
         const blogsCollection = client.db('Promise_hospital').collection('Blogs')
+        const diagnosisCollection = client.db('Promise_hospital').collection('diagnosis')
+
+        const docinfoCollection = client.db('Promise_hospital').collection('docInfo')
 
         router.get('/categories', async (req, res) => {
             const query = {};
@@ -35,6 +38,32 @@ const run = async () => {
             const blog = await blogsCollection.findOne(query)
             res.send(blog)
         })
+
+        router.get('/diagnosis', async (req, res) => {
+            const query = {}
+            const diagnosis = await diagnosisCollection.find(query).toArray()
+            res.send(diagnosis)
+        })
+
+        router.post('/diagnosis', async (req, res) => {
+            const test = req.body;
+            // console.log(package)
+            const result = await diagnosisCollection.insertOne(test)
+            res.send(result)
+        })
+
+        router.get('/diagnosis/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const diagnosis = await diagnosisCollection.findOne(query)
+            res.send(diagnosis)
+        })
+
+        // router.get('/docInfo', async (req, res) => {
+        //     const query = {}
+        //     const diagnosis = await docinfoCollection.find(query).toArray()
+        //     res.send(diagnosis)
+        // })
     }
     finally {
 
