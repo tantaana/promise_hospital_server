@@ -22,6 +22,7 @@ const run = async () => {
         const categoriesCollection = client.db('categories').collection('category')
         const specialitiesCollection = client.db('Promise_hospital').collection('specialities')
         // const docInfo = client.db('Promise_hospital').collection('docInfo');
+        const appointmentData = client.db('Promise_hospital').collection('appointmentData');
 
         router.get('/categories', async (req, res) => {
             const query = {};
@@ -33,6 +34,28 @@ const run = async () => {
             specialities.createdAt = new Date();
             console.log(specialities);
             const result = await specialitiesCollection.insertOne(specialities)
+            res.send(result);
+        })
+
+        router.get('/appointmentData', async (req, res) => {
+            const query = {};
+            const appointmentData = await appointmentData.find(query).toArray()
+            res.send(appointmentData)
+        })
+
+        router.get('/createAppointment/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const appointmentData = await appointmentData.findOne(query)
+            res.send(appointmentData)
+        })
+
+        router.delete('/createAppointment/:id', async (req, res) => {
+            console.log(req)
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await appointmentData.deleteOne(query);
+            console.log(result);
             res.send(result);
         })
         // router.get('/specialities', async (req, res) => {
