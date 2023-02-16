@@ -21,6 +21,7 @@ const run = async () => {
     try {
         const categoriesCollection = client.db('categories').collection('category')
         const specialitiesCollection = client.db('Promise_hospital').collection('specialities')
+        const appointmentDataCollection = client.db('Promise_hospital').collection('appointmentData')
         // const docInfo = client.db('Promise_hospital').collection('docInfo');
 
         router.get('/categories', async (req, res) => {
@@ -40,17 +41,36 @@ const run = async () => {
             const specialities = await specialitiesCollection.find(query).toArray()
             res.send(specialities)
         })
+        router.get('/appointmentData', async (req, res) => {
+            const query = {};
+            const appointmentData = await appointmentDataCollection.find(query).toArray()
+            res.send(appointmentData)
+        })
         router.get('/specialities/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const specialities = await specialitiesCollection.findOne(query)
             res.send(specialities)
         })
+        router.get('/appointmentData/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const appointmentData = await appointmentDataCollection.findOne(query)
+            res.send(appointmentData)
+        })
         router.delete('/specialities/:id', async (req, res) => {
             console.log(req)
             const id = req.params.id;
             const query = { _id: ObjectId(id) }
             const result = await specialitiesCollection.deleteOne(query);
+            console.log(result);
+            res.send(result);
+        })
+        router.delete('/appointmentData/:id', async (req, res) => {
+            console.log(req)
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await appointmentDataCollection.deleteOne(query);
             console.log(result);
             res.send(result);
         })
