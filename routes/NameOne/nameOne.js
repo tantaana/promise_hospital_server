@@ -35,17 +35,17 @@ const run = async () => {
             const result = await specialitiesCollection.insertOne(specialities)
             res.send(result);
         })
-        router.get('/specialities', async (req, res) => {
-            const query = {};
-            const specialities = await specialitiesCollection.find(query).toArray()
-            res.send(specialities)
-        })
-        router.get('/specialities/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const specialities = await specialitiesCollection.findOne(query)
-            res.send(specialities)
-        })
+        // router.get('/specialities', async (req, res) => {
+        //     const query = {};
+        //     const specialities = await specialitiesCollection.find(query).toArray()
+        //     res.send(specialities)
+        // })
+        // router.get('/specialities/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const query = { _id: ObjectId(id) };
+        //     const specialities = await specialitiesCollection.findOne(query)
+        //     res.send(specialities)
+        // })
         router.delete('/specialities/:id', async (req, res) => {
             console.log(req)
             const id = req.params.id;
