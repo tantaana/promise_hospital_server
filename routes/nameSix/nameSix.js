@@ -17,7 +17,7 @@ const run = async () => {
         const categoriesCollection = client.db('categories').collection('category')
         const blogsCollection = client.db('Promise_hospital').collection('Blogs')
         const diagnosisCollection = client.db('Promise_hospital').collection('diagnosis')
-
+        const virtualAppointmentCollection = client.db('Promise_hospital').collection('virtualAppointments')
         const docinfoCollection = client.db('Promise_hospital').collection('docInfo')
 
         router.get('/categories', async (req, res) => {
@@ -58,12 +58,50 @@ const run = async () => {
             const diagnosis = await diagnosisCollection.findOne(query)
             res.send(diagnosis)
         })
+        // virtualAppointmentCollection
+        router.get('/virtualAppointmentData', async (req, res) => {
+            const query = {}
+            const result = await virtualAppointmentCollection.find(query).toArray()
+            res.send(result)
+        })
 
-        // router.get('/docInfo', async (req, res) => {
-        //     const query = {}
-        //     const diagnosis = await docinfoCollection.find(query).toArray()
-        //     res.send(diagnosis)
-        // })
+        router.post('/virtualAppointmentData', async (req, res) => {
+            const appointmentData = req.body
+            const result = await virtualAppointmentCollection.insertOne(appointmentData)
+            res.send(result)
+        })
+
+
+
+        router.get('/user/virtualAppointmentData', async (req, res) => {
+            const patientEmail = req.query.patientEmail;
+            const query = { patientEmail: patientEmail }
+            const result = await virtualAppointmentCollection.find(query).toArray()
+            res.send(result)
+        })
+
+
+        router.get('/doctor/virtualAppointmentData', async (req, res) => {
+            const doctor_email = req.query.doctor_email;
+            const query = { doctor_email: doctor_email }
+            const result = await virtualAppointmentCollection.find(query).toArray()
+            res.send(result)
+        })
+
+
+        router.put('/updata', async (req, res) => {
+            const data = req.body
+            const filter = {}
+            const options = { upsert: true }
+            const updateDoc = {
+                $set: data,
+            }
+            const result = await virtualAppointmentCollection.updateOne(filter, updateDoc, options)
+            res.send(result)
+        })
+
+
+
     }
     finally {
 

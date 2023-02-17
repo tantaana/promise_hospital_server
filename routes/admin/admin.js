@@ -25,11 +25,11 @@ const run = async () => {
         })
 
         const verifyAdmin = async (req, res, next) => {
-            const decoded = req.decoded.email 
-            const query = {email : decoded}
+            const decoded = req.decoded.email
+            const query = { email: decoded }
             const user = await userData.findOne(query)
-            if(user?.role !== "admin"){
-                return res.status(403).send({message: "Forbiden access"})
+            if (user?.userType !== "admin") {
+                return res.status(403).send({ message: "Forbiden access" })
             }
             next()
         }
@@ -39,7 +39,7 @@ const run = async () => {
             console.log(email)
             const query = { email }
             const user = await userData.findOne(query)
-            res.send({ isAdmin: user?.role === "admin" })
+            res.send({ isAdmin: user?.userType === "admin" })
         })
 
     }

@@ -37,11 +37,11 @@ const run = async () => {
             res.send(result);
         })
 
-        router.get('/appointmentData', async (req, res) => {
-            const query = {};
-            const appointmentData = await appointmentData.find(query).toArray()
-            res.send(appointmentData)
-        })
+        // router.get('/appointmentData', async (req, res) => {
+        //     const query = {};
+        //     const appointmentData = await appointmentData.find(query).toArray()
+        //     res.send(appointmentData)
+        // })
 
         router.get('/createAppointment/:id', async (req, res) => {
             const id = req.params.id;
