@@ -89,7 +89,7 @@ const run = async () => {
         })
 
 
-        router.put('/updata', async (req, res) => {
+        router.put('/edit/virtualAppointment', async (req, res) => {
             const data = req.body
             const filter = {}
             const options = { upsert: true }
