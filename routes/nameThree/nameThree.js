@@ -70,7 +70,7 @@ const run = async () => {
             const options = { upsert: true }
             const updatedDoc = {
                 $set: {
-                    userType: 'doctor'
+                    userType: 'Doctor'
                 }
             }
             const result = await userData.updateOne(filter, updatedDoc, options)

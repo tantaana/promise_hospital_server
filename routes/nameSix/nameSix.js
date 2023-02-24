@@ -89,15 +89,34 @@ const run = async () => {
         })
 
 
-        router.put('/edit/virtualAppointment', async (req, res) => {
-            const data = req.body
-            const filter = {}
-            const options = { upsert: true }
-            const updateDoc = {
-                $set: data,
-            }
-            const result = await virtualAppointmentCollection.updateOne(filter, updateDoc, options)
-            res.send(result)
+        // router.put('/edit/virtualAppointment', async (req, res) => {
+        //     const data = req.body
+        //     const filter = {}
+        //     const options = { upsert: true }
+        //     const updateDoc = {
+        //         $set: data,
+        //     }
+        //     const result = await virtualAppointmentCollection.updateOne(filter, updateDoc, options)
+        //     res.send(result)
+        // })
+
+        router.put('/edit/virtualAppointment/:doctor_email', async (req, res) => {
+            // const { doctor_email } = req.params.doctor_email;
+            const { doctor_email } = req.params;
+            const data = req.body;
+            // console.log(email)
+            const find = await virtualAppointmentCollection.updateOne({ doctor_email }, { $set: { Meet_Link: data } });
+            res.send(find)
+
+            // const options = { upsert: true }
+            // const filter = {}
+            // const updatedDoc = {
+            //     $set: {
+            //         userType: 'Doctor'
+            //     }
+            // }
+            // const result = await userData.updateOne(filter, updatedDoc, options)
+            // res.send(result)
         })
 
 

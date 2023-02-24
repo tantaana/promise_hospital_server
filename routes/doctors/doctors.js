@@ -29,7 +29,8 @@ const run = async () => {
             const query = { email }
             const user = await userData.findOne(query)
             // res.send({ users, isSeller: users?.seller === true })
-            res.send({ user, isDoctor: user?.userType === "doctor" })
+            console.log(user.userType)
+            res.send({ user, isDoctor: user?.userType === "Doctor" })
         })
     }
     finally {
