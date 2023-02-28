@@ -53,8 +53,29 @@ const run = async () => {
 
         router.get('/userData', async (req, res) => {
             const query = {};
-            const options = await userData.find(query, { name: 1, _id: 0 }).sort({ "name": 1 }).toArray();
+            const options = await userData.find(query, { userType: 1, _id: 0 }).sort({ "userType": 1 }).toArray();
             res.send(options)
+        });
+
+        router.put('/userData/makeAdmin/:id', async (req, res) => {
+            // const decodedEmail = req.decoded.email;
+            // const query = { email: decodedEmail }
+            // const user = await usersCollections.findOne(query)
+            // if (user?.role !== 'admin') {
+            //     return res.status(403).send({ message: 'forbidden access ' })
+            // }
+
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true }
+            const updatedDoc = {
+                $set: {
+                    role: 'Admin'
+                }
+            }
+            const result = await userData.updateOne(filter, updatedDoc, options)
+            res.send(result)
+
         });
 
         router.put('/userData/:id', async (req, res) => {
@@ -70,7 +91,7 @@ const run = async () => {
             const options = { upsert: true }
             const updatedDoc = {
                 $set: {
-                    userType: 'doctor'
+                    userType: 'Doctor'
                 }
             }
             const result = await userData.updateOne(filter, updatedDoc, options)
