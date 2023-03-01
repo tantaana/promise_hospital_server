@@ -122,9 +122,9 @@ const run = async () => {
             res.send(options)
         })
 
-        router.get('/docInfo/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
+        router.get('/docInfo/:docURL', async (req, res) => {
+            const docURL = req.params.docURL;
+            const query = { docURL: docURL };
             const result = await docInfo.findOne(query);
             res.send(result)
         })
