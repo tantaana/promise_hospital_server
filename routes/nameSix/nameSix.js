@@ -89,15 +89,35 @@ const run = async () => {
         })
 
 
-        router.put('/edit/virtualAppointment', async (req, res) => {
-            const data = req.body
-            const filter = {}
-            const options = { upsert: true }
-            const updateDoc = {
-                $set: data,
-            }
-            const result = await virtualAppointmentCollection.updateOne(filter, updateDoc, options)
-            res.send(result)
+        // router.put('/edit/virtualAppointment/:doctor_email', async (req, res) => {
+        //     const { doctor_email } = req.params;
+        //     const data = req.body;
+        //     const appointment = await virtualAppointmentCollection.findOne({ doctor_email })
+        //     // console.log(appointment)
+        //     const { Meet_Link } = appointment;
+        //     console.log(Meet_Link)
+
+        //     if (Meet_Link) {
+        //         const data = req.body.meet_link;
+        //         const find = await virtualAppointmentCollection.updateOne({ doctor_email }, { $push: { Meet_Link: data } });
+        //         res.send(find)
+        //     }
+        //     else {
+        //         const propertyValues = Object.values(data);
+        //         const find = await virtualAppointmentCollection.updateOne({ doctor_email }, { $set: { Meet_Link: propertyValues } });
+        //         res.send(find)
+        //     }
+        // })
+
+
+
+        router.put('/edit/virtualAppointment/:doctor_email', async (req, res) => {
+            // const { doctor_email } = req.params.doctor_email;
+            const { doctor_email } = req.params;
+            const data = req.body;
+            // console.log(email)
+            const find = await virtualAppointmentCollection.updateOne({ doctor_email }, { $set: { Meet_Link: data } });
+            res.send(find)
         })
 
 
