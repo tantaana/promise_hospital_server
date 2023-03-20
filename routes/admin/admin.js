@@ -39,7 +39,7 @@ const run = async () => {
             console.log(email)
             const query = { email }
             const user = await userData.findOne(query)
-            res.send({ isAdmin: user?.userType === "admin" })
+            res.send({ isAdmin: user?.userType === "Admin" })
         })
 
     }

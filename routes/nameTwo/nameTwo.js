@@ -23,7 +23,7 @@ const run = async () => {
         const categoriesCollection = client.db('categories').collection('category')
         const appointmentData = client.db('Promise_hospital').collection('appointmentData');
         const sslPaidCollection = client.db('ssl').collection('ssls');
-        
+
         router.get('/categories', async (req, res) => {
             const query = {};
             const categories = await categoriesCollection.find(query).toArray()
@@ -31,7 +31,7 @@ const run = async () => {
         })
 
         router.get('/details', async (req, res) => {
-            
+
             const query = {};
             const result = await appointmentData.find(query).toArray();
             res.send(result)
@@ -40,14 +40,14 @@ const run = async () => {
 
 
         router.post('/ssl', async (req, res) => {
-          
+
             const id = req.body.id;
             console.log(id)
             const query = { _id: ObjectId(id) };
             const result = await appointmentData.findOne(query);
             const transectionId = new ObjectId().toString();
-            console.log('tr'+transectionId)
-          
+            console.log('tr' + transectionId)
+
 
             const data = {
                 total_amount: result.fees,
@@ -79,47 +79,63 @@ const run = async () => {
                 ship_postcode: 1000,
                 ship_country: 'Bangladesh',
             };
-          
+
             const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
             sslcz.init(data).then(apiResponse => {
                 // Redirect the user to payment gateway
                 let GatewayPageURL = apiResponse.GatewayPageURL
-                let nPaid=  sslPaidCollection.insertOne({
+                let nPaid = sslPaidCollection.insertOne({
                     ...data,
                     transectionId,
                     paid: false,
 
                 })
-                res.send({uri:GatewayPageURL})
-                
+                res.send({ uri: GatewayPageURL })
+
             });
         })
 
 
-        router.post('/success',async(req,res)=>{
-            const{transectionId} = req.query
-            const result = await sslPaidCollection.updateOne({transectionId},{$set:{paid:true}})
-            if (result.modifiedCount>0){
+        router.post('/success', async (req, res) => {
+            const { transectionId } = req.query
+            const result = await sslPaidCollection.updateOne({ transectionId }, { $set: { paid: true } })
+            if (result.modifiedCount > 0) {
                 res.redirect(`http://localhost:3000/success?transectionId=${transectionId}`)
 
-                }
-            
+            }
+
         })
 
-        router.get('/ssl/:id',async(req,res)=>{
-            const {id} = req.params;
-            const order =await sslPaidCollection.findOne({transectionId:id});
+        router.get('/ssl/:id', async (req, res) => {
+            const { id } = req.params;
+            const order = await sslPaidCollection.findOne({ transectionId: id });
             res.send(order)
         })
 
 
 
-        router.put('/users/edite/', async(req,res)=>{
-            const {email,name}= req.body;
-            const update= req.body;
+        router.put('/users/edite/:email', async (req, res) => {
+            const { email } = req.params;
 
             console.log(email)
-            const find = await userData.updateOne({email},{$set:{name:name,email:email}});
+
+
+            const { name, phone } = req.body;
+
+            console.log(email)
+            const find = await userData.updateOne({ email }, { $set: { name: name, phone: phone } });
+            res.send(find)
+        })
+
+
+        router.get('/users/edite/:email', async (req, res) => {
+            const { email } = req.params;
+
+
+
+
+            const find = await userData.findOne({ email });
+            console.log(find)
             res.send(find)
         })
 
@@ -144,8 +160,8 @@ run().catch(err => console.log(err))
 
 
 
-router.get('/nameTwo',(req,res)=>{
-res.send('nameTwo')
+router.get('/nameTwo', (req, res) => {
+    res.send('nameTwo')
 })
 
 module.exports = router;
