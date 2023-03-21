@@ -8,7 +8,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://endgame:${process.env.DB_PASSWORD}@cluster0.flakcz3.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-// console.log(uri);
+console.log(uri);
 
 
 
@@ -53,8 +53,29 @@ const run = async () => {
 
         router.get('/userData', async (req, res) => {
             const query = {};
-            const options = await userData.find(query, { name: 1, _id: 0 }).sort({ "name": 1 }).toArray();
+            const options = await userData.find(query, { userType: 1, _id: 0 }).sort({ "userType": 1 }).toArray();
             res.send(options)
+        });
+
+        router.put('/userData/makeAdmin/:id', async (req, res) => {
+            // const decodedEmail = req.decoded.email;
+            // const query = { email: decodedEmail }
+            // const user = await usersCollections.findOne(query)
+            // if (user?.role !== 'admin') {
+            //     return res.status(403).send({ message: 'forbidden access ' })
+            // }
+
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true }
+            const updatedDoc = {
+                $set: {
+                    role: 'Admin'
+                }
+            }
+            const result = await userData.updateOne(filter, updatedDoc, options)
+            res.send(result)
+
         });
 
         router.put('/userData/:id', async (req, res) => {
@@ -101,9 +122,9 @@ const run = async () => {
             res.send(options)
         })
 
-        router.get('/docInfo/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
+        router.get('/docInfo/:docURL', async (req, res) => {
+            const docURL = req.params.docURL;
+            const query = { docURL: docURL };
             const result = await docInfo.findOne(query);
             res.send(result)
         })

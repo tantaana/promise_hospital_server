@@ -19,6 +19,7 @@ const run = async () => {
         const diagnosisCollection = client.db('Promise_hospital').collection('diagnosis')
         const virtualAppointmentCollection = client.db('Promise_hospital').collection('virtualAppointments')
         const docinfoCollection = client.db('Promise_hospital').collection('docInfo')
+        const diagnosisAppointments = client.db('Promise_hospital').collection('diagnosisAppointmentsData')
 
         router.get('/categories', async (req, res) => {
             const query = {};
@@ -49,6 +50,12 @@ const run = async () => {
             const test = req.body;
             // console.log(package)
             const result = await diagnosisCollection.insertOne(test)
+            res.send(result)
+        })
+
+        router.post('/diagnosisAppointments', async (req, res) => {
+            const test = req.body;
+            const result = await diagnosisAppointments.insertOne(test)
             res.send(result)
         })
 
